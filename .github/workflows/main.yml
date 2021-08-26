@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          path: lumenfile
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
         with:
@@ -28,23 +30,23 @@ jobs:
       - name: Cache composer dependencies
         uses: actions/cache@v2
         with:
-          path: ${{ steps.composer-cache.outputs.dir }}
+          path: lumenfile
           # Use composer.json for key, if composer.lock is not committed.
           # key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/lumenfile/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
       - name: Install Composer dependencies
-        run: |
-          cd lumenfile
-          composer install --no-progress --prefer-dist --optimize-autoloader
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
+        with:
+          path: lumenfile
       - name: Prepare the application
-        run: |
-          cd lumenfile
-          php -r "file_exists('.env') || copy('.env.example', '.env');"
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+        with:
+          path: lumenfile
       - name: Test with phpunit
-        run: |
-          cd lumenfile
-          vendor/bin/phpunit -c phpunit.xml --log-junit results/test-results.xml --coverage-clover results/test-coverage.xml
+        run: vendor/bin/phpunit -c phpunit.xml --log-junit results/test-results.xml --coverage-clover results/test-coverage.xml
+        with:
+          path: lumenfile
       - name: fix code coverage paths
         working-directory: ./lumenfile/results
         run: |
