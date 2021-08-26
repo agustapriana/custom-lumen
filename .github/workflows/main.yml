@@ -36,7 +36,6 @@ jobs:
           # key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/lumenfile/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
-        working-directory: lumenfile
       - name: Install Composer dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader
         working-directory: lumenfile
