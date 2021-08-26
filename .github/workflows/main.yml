@@ -33,16 +33,18 @@ jobs:
           # key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
-      - name: Masuk ke lumenfile
-        run: cd lumenfile
       - name: Install Composer dependencies
-        run: composer install --no-progress --prefer-dist --optimize-autoloader
+        run: |
+          cd lumenfile
+          composer install --no-progress --prefer-dist --optimize-autoloader
       - name: Prepare the application
-        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+        run: |
+          cd lumenfile
+          php -r "file_exists('.env') || copy('.env.example', '.env');"
       - name: Test with phpunit
-        run: vendor/bin/phpunit -c phpunit.xml --log-junit results/test-results.xml --coverage-clover results/test-coverage.xml
-      - name: Keluar ke lumenfile
-        run: cd ..
+        run: |
+          cd lumenfile
+          vendor/bin/phpunit -c phpunit.xml --log-junit results/test-results.xml --coverage-clover results/test-coverage.xml
       - name: fix code coverage paths
         working-directory: ./lumenfile/results
         run: |
