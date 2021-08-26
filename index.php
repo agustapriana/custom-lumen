@@ -25,4 +25,4 @@ $app = require __DIR__.'/lumenfile/bootstrap/app.php';
 |
 */
 
-$app->run();
+$app->run(); 
